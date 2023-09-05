@@ -1,6 +1,11 @@
 import { Text, TextInput } from "react-native";
 
-function InputLogin (props: {inputHeader: string, }): JSX.Element {
+interface InputProps {
+	inputHeader: string;
+	handleTextChange: Function;
+}
+
+function InputLogin (props: InputProps): JSX.Element {
   return (
     <>
 			<Text>
@@ -13,6 +18,7 @@ function InputLogin (props: {inputHeader: string, }): JSX.Element {
     	    borderWidth: 1
     	  }}
     	  placeholder='Digite sua senha'
+				onChangeText={(value) => props.handleTextChange(value)}
     	/>
     </>
   );

@@ -11,16 +11,16 @@ import {
   StatusBar,
   Text,
   useColorScheme,
-  View,
+  View
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-function App(): JSX.Element {
+function App (): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
   };
 
   return (
@@ -31,11 +31,11 @@ function App(): JSX.Element {
       />
       <View
         style={{
-          backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          backgroundColor: isDarkMode ? Colors.black : Colors.white
         }}>
         <Text
           style={{
-            color: isDarkMode ? Colors.white : Colors.black,
+            color: isDarkMode ? Colors.white : Colors.black
           }}>
           Hello, World!
         </Text>

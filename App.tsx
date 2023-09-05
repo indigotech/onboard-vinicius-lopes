@@ -1,20 +1,11 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import {
   SafeAreaView,
   StatusBar,
-  Text,
   useColorScheme,
-  View
 } from 'react-native';
-
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import LoginScreen from './src/login-screen';
 
 function App (): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -29,17 +20,7 @@ function App (): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View
-        style={{
-          backgroundColor: isDarkMode ? Colors.black : Colors.white
-        }}>
-        <Text
-          style={{
-            color: isDarkMode ? Colors.white : Colors.black
-          }}>
-          Hello, World!
-        </Text>
-      </View>
+      <LoginScreen isDarkMode={isDarkMode}/>
     </SafeAreaView>
   );
 }

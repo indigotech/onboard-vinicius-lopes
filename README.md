@@ -19,7 +19,7 @@ __This projects uses:__
 ### Cloning and Dependencies:
 
 1. Clone this repository
-2. Go to t
+2. Go to the project's root folder
 3. Install node dependencies running the command:
 ```
 npm install

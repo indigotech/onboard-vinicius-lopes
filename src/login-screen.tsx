@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, Text, Button, Alert, StyleSheet } from "react-native";
 import { InputSimple } from "./input-simple";
+import { validateEmail, validatePassword } from "../utils/input-validations";
 
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
@@ -14,10 +15,27 @@ export function LoginScreen (): JSX.Element {
       setPassword(password);
     }
 
+    function showInvalidInputMessage(
+      inputHeader: string,
+      errorMessage: string | undefined 
+    ): void {
+      Alert.alert(`No campo ${inputHeader}.\n\n${errorMessage}`);
+    }
+
     function handleLoginButton(): void {
+      const emailValidation = validateEmail(email);
+      const passwordValidation = validatePassword(password);
+      
+      if (emailValidation.isValidInput && passwordValidation.isValidInput) {
+        Alert.alert(`Olá, ${email}`)
+      }
+      else if (!emailValidation.isValidInput) {
+        showInvalidInputMessage('E-mail', emailValidation.errorMessage);
+      } else {
+        showInvalidInputMessage('Senha', passwordValidation.errorMessage);
+      }
       setEmail('');
       setPassword('');
-      Alert.alert(`Hello, ${email}. Your password is ${password}`);
     }
 
     return (

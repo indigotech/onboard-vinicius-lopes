@@ -1,14 +1,20 @@
 const EMPTY_STRING_SIZE = 0; 
 const MINIMUM_PASSWORD_SIZE = 7;
 
-const EMPTY_INPUT_MESSAGE = `O campo deve ser preenchido`;
+export const ErrorMessages = {
+  EMPTY_INPUT: 'O campo deve ser preenchido',
+  SHORT_INPUT: 'A senha deve conter, no mínimo, 7 caracteres',
+  INVALID_EMAIL: 'O e-mail não atende ao padrão ###@###.com',
+  INVALID_PASSWORD: 'A senha deve conter, no mínimo, uma letra e um dígito',
+}
 export interface ValidationObject {
+  inputHeader: string;
   isValidInput: boolean;
   errorMessage?: string;
 }
 
 function isInputEmpty(input: string): boolean {
-  return input.length === 0 ? true : false;
+  return input.length === EMPTY_STRING_SIZE ? true : false;
 }
 
 function isInputTooShort(input: string, MINIMUM_PASSWORD_SIZE: number): boolean {
@@ -25,42 +31,37 @@ function isPasswordPatternInvalid(password: string): boolean {
 }
 
 export function validateEmail(email: string): ValidationObject {
-  if (isInputEmpty(email)) {
-    return {
-      isValidInput: false,
-      errorMessage: EMPTY_INPUT_MESSAGE,
-    };
-  } else if (isEmailPatternInvalid(email)) {
-    return {
-      isValidInput: false,
-      errorMessage: 'O e-mail não atende ao padrão ###@###.com'
-    };
-  }
-  return {
+  const emailValidation: ValidationObject = {
+    inputHeader: 'E-mail',
     isValidInput: true,
   };
+
+  if (isInputEmpty(email)) {
+    emailValidation.isValidInput = false;
+    emailValidation.errorMessage = ErrorMessages.EMPTY_INPUT
+  } else if (isEmailPatternInvalid(email)) {
+    emailValidation.isValidInput = false;
+    emailValidation.errorMessage = ErrorMessages.INVALID_EMAIL;
+  }
+  return emailValidation;
 }
 
 export function validatePassword(password: string): ValidationObject {
-  if (isInputEmpty(password)) {
-    return {
-      isValidInput: false,
-      errorMessage: EMPTY_INPUT_MESSAGE,
-    };
-  } else if (isInputTooShort(password, MINIMUM_PASSWORD_SIZE)) {
-    return {
-      isValidInput: false,
-      errorMessage: 'A senha é deve conter, no mínimo, 7 caracteres',
-    };
-  } else if (isPasswordPatternInvalid(password)) {
-    return {
-      isValidInput: false,
-      errorMessage: 'A senha deve conter, no mínimo, uma letra e um dígito',
-    }
-  }
-
-  return {
+  const passwordValidation: ValidationObject = {
+    inputHeader: 'Senha',
     isValidInput: true,
+  };
+
+  if (isInputEmpty(password)) {
+    passwordValidation.isValidInput = false;
+    passwordValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
+  } else if (isInputTooShort(password, MINIMUM_PASSWORD_SIZE)) {
+    passwordValidation.isValidInput = false
+    passwordValidation.errorMessage = ErrorMessages.SHORT_INPUT;
+  } else if (isPasswordPatternInvalid(password)) {
+    passwordValidation.isValidInput = false;
+    passwordValidation.errorMessage = ErrorMessages.INVALID_PASSWORD;
   }
+  return passwordValidation;
 }
 

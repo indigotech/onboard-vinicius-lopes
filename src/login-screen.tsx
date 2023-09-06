@@ -1,35 +1,55 @@
 import { useState } from "react";
-import { View, Text, Button, Alert } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { View, Text, Button, Alert, StyleSheet } from "react-native";
 import InputLogin from "./input-login";
 
-function LoginScreen (props: {isDarkMode: boolean}): JSX.Element {
+function LoginScreen (): JSX.Element {
 		const [email, setEmail] = useState('');
 		const [password, setPassword] = useState('');
 		
-		function handleEmailChange (email: string): void {
+		function handleEmailChange(email: string): void {
 			setEmail(email);
 		}
 
-		function handlePasswordChange (password: string): void {
+		function handlePasswordChange(password: string): void {
 			setPassword(password);
 		}
 
+		function handleLoginButton(): void {
+			setEmail('');
+			setPassword('');
+			Alert.alert(`Hello, ${email}. Your password is ${password}`);
+		}
+
 		return (
-    	<View
-        style={{
-          backgroundColor: props.isDarkMode ? Colors.black : Colors.white
-        }}>
-        <Text>Bem-vindo(a) à Taqtile</Text>
-        <InputLogin inputHeader='E-mail' handleTextChange={handleEmailChange}/>
-        <InputLogin inputHeader='Senha' handleTextChange={handlePasswordChange}/>
+    	<View style={styles.mainView}>
+        <Text style={styles.greeting}>Bem-vindo(a) à Taqtile!</Text>
+        <InputLogin
+					inputHeader='E-mail'
+					value={email}
+					handleTextChange={handleEmailChange}/>
+        <InputLogin
+					inputHeader='Senha'
+					value={password}
+					handleTextChange={handlePasswordChange}
+					secureTextEntry={true}
+				/>
 				<Button
-					onPress={() => Alert.alert(`Hello, ${email}. Your password is ${password}`)}
+					onPress={handleLoginButton}
 					title='Entrar'
 					color='purple'
 				/>
       </View>
     );
 }
+
+const styles = StyleSheet.create({
+	mainView: {
+		padding: 10,
+	},
+	greeting : {
+		fontSize: 20,
+		marginVertical: 10,
+	},
+});
 
 export default LoginScreen;

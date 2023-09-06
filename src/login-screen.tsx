@@ -19,7 +19,7 @@ export function LoginScreen (): JSX.Element {
       inputHeader: string,
       errorMessage: string | undefined 
     ): void {
-      Alert.alert(`No campo ${inputHeader}.\n\n${errorMessage}`);
+      Alert.alert(`Erro no campo "${inputHeader}"`, `${errorMessage}`);
     }
 
     function handleLoginButton(): void {
@@ -30,9 +30,15 @@ export function LoginScreen (): JSX.Element {
         Alert.alert(`Olá, ${email}`)
       }
       else if (!emailValidation.isValidInput) {
-        showInvalidInputMessage('E-mail', emailValidation.errorMessage);
+        showInvalidInputMessage(
+          emailValidation.inputHeader,
+          emailValidation.errorMessage
+        );
       } else {
-        showInvalidInputMessage('Senha', passwordValidation.errorMessage);
+        showInvalidInputMessage(
+          passwordValidation.inputHeader,
+          passwordValidation.errorMessage
+        );
       }
       setEmail('');
       setPassword('');

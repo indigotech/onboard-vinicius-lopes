@@ -15,42 +15,29 @@ export function LoginScreen (): JSX.Element {
       setPassword(password);
     }
 
-    function showInvalidInputMessage(
-      inputHeader: string,
-      errorMessage: string | undefined 
-    ): void {
-      Alert.alert(`Erro no campo "${inputHeader}"`, `${errorMessage}`);
-    }
-
     function handleLoginButton(): void {
       const emailValidation = validateEmail(email);
       const passwordValidation = validatePassword(password);
       const inputs = [emailValidation, passwordValidation];
       
-      if (isAllInputsValid(inputs)) {
+      if (isEveryInputsValid(inputs)) {
         Alert.alert(`Olá, ${email}`);
       } else {
-        handleFirstInvalidInput(inputs);
+        showFirstInvalidInput(inputs);
       }
       clearAllInputs();
     }
 
-    function isAllInputsValid(inputs: Array<ValidationObject>): boolean {
-      inputs.forEach((input) => {
-        if (!input.isValidInput) {
-          return false;
-        }
-      });
-      return true;
+    function isEveryInputsValid(inputs: Array<ValidationObject>): boolean {
+      return inputs.every((input) => input.isValidInput);
     }
 
-    function handleFirstInvalidInput(inputs: Array<ValidationObject>): void {
-      inputs.forEach((input) => {
-        if(!input.isValidInput) {
-          showInvalidInputMessage(input.inputHeader, input.errorMessage);
-          return;
-        }
-      });
+    function showFirstInvalidInput(inputs: Array<ValidationObject>): void {
+      const firstInvalid = inputs.find((input) => !input.isValidInput)
+      Alert.alert(
+        `Erro no campo "${firstInvalid?.inputHeader}"`, 
+        `${firstInvalid?.errorMessage}`
+      );
     }
 
     function clearAllInputs(): void {

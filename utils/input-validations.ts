@@ -27,7 +27,17 @@ function isEmailPatternInvalid(email: string): boolean {
 }
 
 function isPasswordPatternInvalid(password: string): boolean {
-  return password.match(/[a-zA-Z]/) && password.match(/\d/) ? false : true;
+  const hasLetter = /[a-zA-Z]/;
+  const hasDigit = /\d/;
+  return password.match(hasLetter) && password.match(hasDigit) ? false : true;
+}
+
+function setInvalidObject(
+  validationObj: ValidationObject,
+  invalidMessage: string
+): void {
+  validationObj.isValidInput = false;
+  validationObj.errorMessage = invalidMessage;
 }
 
 export function validateEmail(email: string): ValidationObject {
@@ -37,11 +47,9 @@ export function validateEmail(email: string): ValidationObject {
   };
 
   if (isInputEmpty(email)) {
-    emailValidation.isValidInput = false;
-    emailValidation.errorMessage = ErrorMessages.EMPTY_INPUT
+    setInvalidObject(emailValidation, ErrorMessages.EMPTY_INPUT);
   } else if (isEmailPatternInvalid(email)) {
-    emailValidation.isValidInput = false;
-    emailValidation.errorMessage = ErrorMessages.INVALID_EMAIL;
+    setInvalidObject(emailValidation, ErrorMessages.INVALID_EMAIL);
   }
   return emailValidation;
 }
@@ -53,14 +61,11 @@ export function validatePassword(password: string): ValidationObject {
   };
 
   if (isInputEmpty(password)) {
-    passwordValidation.isValidInput = false;
-    passwordValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
+    setInvalidObject(passwordValidation, ErrorMessages.EMPTY_INPUT);
   } else if (isInputTooShort(password, MINIMUM_PASSWORD_SIZE)) {
-    passwordValidation.isValidInput = false
-    passwordValidation.errorMessage = ErrorMessages.SHORT_INPUT;
+    setInvalidObject(passwordValidation, ErrorMessages.SHORT_INPUT);
   } else if (isPasswordPatternInvalid(password)) {
-    passwordValidation.isValidInput = false;
-    passwordValidation.errorMessage = ErrorMessages.INVALID_PASSWORD;
+    setInvalidObject(passwordValidation, ErrorMessages.INVALID_PASSWORD);
   }
   return passwordValidation;
 }

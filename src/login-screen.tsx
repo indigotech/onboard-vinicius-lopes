@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Text, Button, Alert, StyleSheet } from "react-native";
 import { InputSimple } from "./input-simple";
-import { validateEmail, validatePassword } from "../utils/input-validations";
+import { ValidationObject, validateEmail, validatePassword } from "../utils/input-validations";
 
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
@@ -25,21 +25,35 @@ export function LoginScreen (): JSX.Element {
     function handleLoginButton(): void {
       const emailValidation = validateEmail(email);
       const passwordValidation = validatePassword(password);
+      const inputs = [emailValidation, passwordValidation];
       
-      if (emailValidation.isValidInput && passwordValidation.isValidInput) {
-        Alert.alert(`Olá, ${email}`)
-      }
-      else if (!emailValidation.isValidInput) {
-        showInvalidInputMessage(
-          emailValidation.inputHeader,
-          emailValidation.errorMessage
-        );
+      if (isAllInputsValid(inputs)) {
+        Alert.alert(`Olá, ${email}`);
       } else {
-        showInvalidInputMessage(
-          passwordValidation.inputHeader,
-          passwordValidation.errorMessage
-        );
+        handleFirstInvalidInput(inputs);
       }
+      clearAllInputs();
+    }
+
+    function isAllInputsValid(inputs: Array<ValidationObject>): boolean {
+      inputs.forEach((input) => {
+        if (!input.isValidInput) {
+          return false;
+        }
+      });
+      return true;
+    }
+
+    function handleFirstInvalidInput(inputs: Array<ValidationObject>): void {
+      inputs.forEach((input) => {
+        if(!input.isValidInput) {
+          showInvalidInputMessage(input.inputHeader, input.errorMessage);
+          return;
+        }
+      });
+    }
+
+    function clearAllInputs(): void {
       setEmail('');
       setPassword('');
     }

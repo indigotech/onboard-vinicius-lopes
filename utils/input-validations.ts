@@ -17,8 +17,8 @@ function isInputEmpty(input: string): boolean {
   return input.length === EMPTY_STRING_SIZE ? true : false;
 }
 
-function isInputTooShort(input: string, MINIMUM_PASSWORD_SIZE: number): boolean {
-  return input.length < MINIMUM_PASSWORD_SIZE ? true : false;
+function isInputTooShort(input: string, minimumPasswordSize: number): boolean {
+  return input.length < minimumPasswordSize ? true : false;
 }
 
 function isEmailPatternInvalid(email: string): boolean {
@@ -33,11 +33,14 @@ function isPasswordPatternInvalid(password: string): boolean {
 }
 
 function setInvalidObject(
-  validationObj: ValidationObject,
+  inputHeader: string,
   invalidMessage: string
-): void {
-  validationObj.isValidInput = false;
-  validationObj.errorMessage = invalidMessage;
+): ValidationObject {
+  return {
+    inputHeader: inputHeader,
+    isValidInput: false,
+    errorMessage: invalidMessage
+  }
 }
 
 export function validateEmail(email: string): ValidationObject {
@@ -45,11 +48,13 @@ export function validateEmail(email: string): ValidationObject {
     inputHeader: 'E-mail',
     isValidInput: true,
   };
-
+  const inputHeader = emailValidation.inputHeader;
+  
   if (isInputEmpty(email)) {
-    setInvalidObject(emailValidation, ErrorMessages.EMPTY_INPUT);
-  } else if (isEmailPatternInvalid(email)) {
-    setInvalidObject(emailValidation, ErrorMessages.INVALID_EMAIL);
+    return setInvalidObject(inputHeader, ErrorMessages.EMPTY_INPUT);
+  }
+  if (isEmailPatternInvalid(email)) {
+    return setInvalidObject(inputHeader, ErrorMessages.INVALID_EMAIL);
   }
   return emailValidation;
 }
@@ -59,13 +64,16 @@ export function validatePassword(password: string): ValidationObject {
     inputHeader: 'Senha',
     isValidInput: true,
   };
+  const inputHeader = passwordValidation.inputHeader;
 
   if (isInputEmpty(password)) {
-    setInvalidObject(passwordValidation, ErrorMessages.EMPTY_INPUT);
-  } else if (isInputTooShort(password, MINIMUM_PASSWORD_SIZE)) {
-    setInvalidObject(passwordValidation, ErrorMessages.SHORT_INPUT);
-  } else if (isPasswordPatternInvalid(password)) {
-    setInvalidObject(passwordValidation, ErrorMessages.INVALID_PASSWORD);
+    return setInvalidObject(inputHeader, ErrorMessages.EMPTY_INPUT);
+  }
+  if (isInputTooShort(password, MINIMUM_PASSWORD_SIZE)) {
+    return setInvalidObject(inputHeader, ErrorMessages.SHORT_INPUT);
+  }
+  if (isPasswordPatternInvalid(password)) {
+    return setInvalidObject(inputHeader, ErrorMessages.INVALID_PASSWORD);
   }
   return passwordValidation;
 }

@@ -22,7 +22,7 @@ function isInputTooShort(input: string, minimumPasswordSize: number): boolean {
 }
 
 function isEmailPatternInvalid(email: string): boolean {
-  const emailValidPattern: RegExp = /\w{3,}\@\w{3,}\.com/;
+  const emailValidPattern: RegExp = /\w{3,}\@\w{3,}\.com(\.br)?/;
   return email.match(emailValidPattern) ? false : true;
 }
 

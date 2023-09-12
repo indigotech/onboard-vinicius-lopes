@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { View, Text, Button, Alert, StyleSheet } from "react-native";
 import { InputSimple } from "./input-simple";
-import { ValidationObject, validateEmail, validatePassword } from "../utils/input-validations";
+import { 
+  InputValidation,
+  isEveryInputValid, 
+  validateEmail, 
+  validatePassword 
+} from "../utils/input-validations";
 
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
@@ -20,7 +25,7 @@ export function LoginScreen (): JSX.Element {
       const passwordValidation = validatePassword(password);
       const inputs = [emailValidation, passwordValidation];
       
-      if (isEveryInputsValid(inputs)) {
+      if (isEveryInputValid(inputs)) {
         Alert.alert(`Olá, ${email}`);
       } else {
         showFirstInvalidInput(inputs);
@@ -28,11 +33,7 @@ export function LoginScreen (): JSX.Element {
       clearAllInputs();
     }
 
-    function isEveryInputsValid(inputs: Array<ValidationObject>): boolean {
-      return inputs.every((input) => input.isValidInput);
-    }
-
-    function showFirstInvalidInput(inputs: Array<ValidationObject>): void {
+    function showFirstInvalidInput(inputs: Array<InputValidation>): void {
       const firstInvalid = inputs.find((input) => !input.isValidInput)
       Alert.alert(
         `Erro no campo "${firstInvalid?.inputHeader}"`, 

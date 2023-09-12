@@ -7,14 +7,14 @@ export const ErrorMessages = {
   INVALID_EMAIL: 'O e-mail não atende ao padrão ###@###.com',
   INVALID_PASSWORD: 'A senha deve conter, no mínimo, uma letra e um dígito',
 }
-export interface ValidationObject {
+export interface InputValidation {
   inputHeader: string;
   isValidInput: boolean;
   errorMessage?: string;
 }
 
 function isInputEmpty(input: string): boolean {
-  return input.length === EMPTY_STRING_SIZE ? true : false;
+  return input.length === 0 ? true : false;
 }
 
 function isInputTooShort(input: string, minimumPasswordSize: number): boolean {
@@ -32,49 +32,45 @@ function isPasswordPatternInvalid(password: string): boolean {
   return password.match(hasLetter) && password.match(hasDigit) ? false : true;
 }
 
-function setInvalidObject(
-  inputHeader: string,
-  invalidMessage: string
-): ValidationObject {
-  return {
-    inputHeader: inputHeader,
-    isValidInput: false,
-    errorMessage: invalidMessage
-  }
-}
-
-export function validateEmail(email: string): ValidationObject {
-  const emailValidation: ValidationObject = {
-    inputHeader: 'E-mail',
-    isValidInput: true,
-  };
-  const inputHeader = emailValidation.inputHeader;
+export function validateEmail(email: string): InputValidation {
+  const inputHeader = 'E-mail';
+  const emailValidation: InputValidation = { inputHeader, isValidInput: true };
   
   if (isInputEmpty(email)) {
-    return setInvalidObject(inputHeader, ErrorMessages.EMPTY_INPUT);
+    emailValidation.isValidInput = false;
+    emailValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
+    return emailValidation;
   }
   if (isEmailPatternInvalid(email)) {
-    return setInvalidObject(inputHeader, ErrorMessages.INVALID_EMAIL);
+    emailValidation.isValidInput = false;
+    emailValidation.errorMessage = ErrorMessages.INVALID_EMAIL;
+    return emailValidation;
   }
   return emailValidation;
 }
 
-export function validatePassword(password: string): ValidationObject {
-  const passwordValidation: ValidationObject = {
-    inputHeader: 'Senha',
-    isValidInput: true,
-  };
-  const inputHeader = passwordValidation.inputHeader;
+export function validatePassword(password: string): InputValidation {
+  const inputHeader = 'Senha';
+  const passwordValidation: InputValidation = { inputHeader, isValidInput: true };
 
   if (isInputEmpty(password)) {
-    return setInvalidObject(inputHeader, ErrorMessages.EMPTY_INPUT);
+    passwordValidation.isValidInput = false;
+    passwordValidation.errorMessage = ErrorMessages.EMPTY_INPUT;  
+    return passwordValidation;
   }
   if (isInputTooShort(password, MINIMUM_PASSWORD_SIZE)) {
-    return setInvalidObject(inputHeader, ErrorMessages.SHORT_INPUT);
+    passwordValidation.isValidInput = false;
+    passwordValidation.errorMessage = ErrorMessages.SHORT_INPUT;
+    return passwordValidation;
   }
   if (isPasswordPatternInvalid(password)) {
-    return setInvalidObject(inputHeader, ErrorMessages.INVALID_PASSWORD);
+    passwordValidation.isValidInput = false;
+    passwordValidation.errorMessage = ErrorMessages.INVALID_PASSWORD;
+    return passwordValidation;
   }
   return passwordValidation;
 }
 
+export function isEveryInputValid(inputs: Array<InputValidation>): boolean {
+  return inputs.every((input) => input.isValidInput);
+}

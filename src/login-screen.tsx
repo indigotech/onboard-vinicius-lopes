@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { View, Text, Button, Alert, StyleSheet } from "react-native";
+import { useState } from "react";
+import { View, Text, Button, Alert, StyleSheet, ActivityIndicator } from "react-native";
 import { InputSimple } from "./input-simple";
 import { 
   InputValidation,
@@ -7,32 +7,12 @@ import {
   validateEmail, 
   validatePassword 
 } from "../utils/input-validations";
-import { useMutation, gql } from "@apollo/client";
-
-const LOGIN_GQL = gql`
-  mutation MakeLogin($authData: LoginInput!) {
-    login(data: $authData) {
-      token
-      user {
-        id
-        name
-        email
-        role
-      }
-    }
-  }
-`;
+import { useLoginMutation } from "./hooks/use-login-mutation";
 
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [logInUser, { data, loading, error }] = useMutation(LOGIN_GQL);
-    
-    useEffect(() => {
-      if (!loading){
-        Alert.alert('Autenticado', `Olá, ${data?.login.user.name}`);
-      }
-    }, [data]);
+    const [loginMutation, {data, loading, error}] = useLoginMutation(email, password);
     
     function handleEmailChange(email: string): void {
       setEmail(email);
@@ -48,13 +28,7 @@ export function LoginScreen (): JSX.Element {
       const inputs = [emailValidation, passwordValidation];
       
       if (isEveryInputValid(inputs)) {
-        logInUser({
-          variables: {
-            authData: {email: email, password: password}
-          },
-          onCompleted: () => Alert.alert('Autenticado', `Olá, ${data.login.user.name}`),
-          onError: () => Alert.alert(`Error ${error}`)
-        });
+        loginMutation();
       } else {
         showFirstInvalidInput(inputs);
       }
@@ -89,10 +63,11 @@ export function LoginScreen (): JSX.Element {
         />
         <Button
           onPress={handleLoginButton}
+          disabled={loading}
           title='Entrar'
           color='purple'
         />
-        {loading && <Text>Autenticando...</Text>}
+        {loading && <ActivityIndicator size='large' />}
       </View>
     );
 }

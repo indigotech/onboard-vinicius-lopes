@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, Button, Alert, StyleSheet } from "react-native";
 import { InputSimple } from "./input-simple";
 import { 
@@ -7,10 +7,32 @@ import {
   validateEmail, 
   validatePassword 
 } from "../utils/input-validations";
+import { useMutation, gql } from "@apollo/client";
+
+const LOGIN_GQL = gql`
+  mutation MakeLogin($authData: LoginInput!) {
+    login(data: $authData) {
+      token
+      user {
+        id
+        name
+        email
+        role
+      }
+    }
+  }
+`;
 
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [logInUser, { data, loading, error }] = useMutation(LOGIN_GQL);
+    
+    useEffect(() => {
+      if (!loading){
+        Alert.alert('Autenticado', `Olá, ${data?.login.user.name}`);
+      }
+    }, [data]);
     
     function handleEmailChange(email: string): void {
       setEmail(email);
@@ -26,7 +48,13 @@ export function LoginScreen (): JSX.Element {
       const inputs = [emailValidation, passwordValidation];
       
       if (isEveryInputValid(inputs)) {
-        Alert.alert(`Olá, ${email}`);
+        logInUser({
+          variables: {
+            authData: {email: email, password: password}
+          },
+          onCompleted: () => Alert.alert('Autenticado', `Olá, ${data.login.user.name}`),
+          onError: () => Alert.alert(`Error ${error}`)
+        });
       } else {
         showFirstInvalidInput(inputs);
       }
@@ -64,6 +92,7 @@ export function LoginScreen (): JSX.Element {
           title='Entrar'
           color='purple'
         />
+        {loading && <Text>Autenticando...</Text>}
       </View>
     );
 }

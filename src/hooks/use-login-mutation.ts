@@ -15,7 +15,7 @@ export function useLoginMutation() {
     LOGIN_MUTATION,
     {
       errorPolicy: 'all',
-      onCompleted: (data) => {storage.set('token', data.login.token);Alert.alert(data.login.token)},
+      onCompleted: (data) => storage.set('token', data.login.token),
       onError: (error) => Alert.alert('Erro de Autenticação', error.message)
     });
   return { loginMutation, data, loading, error };

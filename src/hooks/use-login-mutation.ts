@@ -1,22 +1,23 @@
 import { useMutation, gql } from "@apollo/client";
 import { Alert } from "react-native";
+import { storage } from "../../App";
 
-const LOGIN_GQL = gql`
-  mutation MakeLogin($authData: LoginInput!) {
-    login(data: $authData) {
+const LOGIN_MUTATION = gql`
+  mutation MakeLogin($auth: LoginInput!) {
+    login(data: $auth) {
       token
     }
   }
 `;
 
-export const useLoginMutation: any = (email: string, password: string) => {
+export function useLoginMutation(email: string, password: string) {
   const [loginMutation, { data, loading, error }] = useMutation(
-    LOGIN_GQL,
+    LOGIN_MUTATION,
     {
-      variables: {authData: {email: email, password: password }},
+      variables: { auth: { email: email, password: password } },
       errorPolicy: 'all',
-      onCompleted: () => Alert.alert('Welcome'),
-      onError: (error) => Alert.alert('Erro durante autenticação', error.message)    
+      onCompleted: (data) => storage.set('token', data.login.token),
+      onError: (error) => Alert.alert('Erro de Autenticação', error.message)
     });
-  return [ loginMutation, { data, loading, error } ];
+  return { loginMutation, data, loading, error };
 }

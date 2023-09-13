@@ -12,8 +12,8 @@ import { useLoginMutation } from "./hooks/use-login-mutation";
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginMutation, {data, loading, error}] = useLoginMutation(email, password);
-    
+    const {loginMutation, loading, error } = useLoginMutation(email, password);
+
     function handleEmailChange(email: string): void {
       setEmail(email);
     }

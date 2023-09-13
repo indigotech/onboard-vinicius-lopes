@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Button, Alert, StyleSheet } from "react-native";
+import { View, Text, Button, Alert, StyleSheet, ActivityIndicator } from "react-native";
 import { InputSimple } from "./input-simple";
 import { 
   InputValidation,
@@ -7,11 +7,13 @@ import {
   validateEmail, 
   validatePassword 
 } from "../utils/input-validations";
+import { useLoginMutation } from "./hooks/use-login-mutation";
 
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
+    const { loginMutation, loading } = useLoginMutation();
+
     function handleEmailChange(email: string): void {
       setEmail(email);
     }
@@ -26,11 +28,15 @@ export function LoginScreen (): JSX.Element {
       const inputs = [emailValidation, passwordValidation];
       
       if (isEveryInputValid(inputs)) {
-        Alert.alert(`Olá, ${email}`);
+        login(email, password);
       } else {
         showFirstInvalidInput(inputs);
       }
       clearAllInputs();
+    }
+
+    function login(email: string, password: string) {
+      loginMutation({ variables: { auth: { email, password } } });
     }
 
     function showFirstInvalidInput(inputs: Array<InputValidation>): void {
@@ -61,9 +67,11 @@ export function LoginScreen (): JSX.Element {
         />
         <Button
           onPress={handleLoginButton}
+          disabled={loading}
           title='Entrar'
           color='purple'
         />
+        {loading && <ActivityIndicator size='large' />}
       </View>
     );
 }

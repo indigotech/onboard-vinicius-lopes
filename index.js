@@ -6,8 +6,8 @@ import { Navigation } from 'react-native-navigation';
 import { HomeScreen } from './src/home-screen';
 import { App } from './App';
 
-Navigation.registerComponent('Login', () => App);
-Navigation.registerComponent('Home', () => HomeScreen);
+Navigation.registerComponent('LOGIN', () => App);
+Navigation.registerComponent('HOME', () => HomeScreen);
 
 Navigation.events().registerAppLaunchedListener(async () => {
   Navigation.setRoot({
@@ -16,7 +16,7 @@ Navigation.events().registerAppLaunchedListener(async () => {
         children: [
           {
             component: {
-              name: 'Login'
+              name: 'LOGIN'
             }
           }
         ]

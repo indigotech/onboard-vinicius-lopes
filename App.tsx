@@ -11,12 +11,25 @@ const client = new ApolloClient({
 
 export const storage = new MMKV({ id: 'onboarding-app' });
 
-export function App(): JSX.Element {
+interface Props {
+  componentId: string;
+}
+
+export function App({ componentId }: Props): JSX.Element{
   return (
     <ApolloProvider client={client}>
       <SafeAreaView>
-        <LoginScreen />
+        <LoginScreen componentId={componentId} />
       </SafeAreaView>
     </ApolloProvider>
   );
+}
+
+App.options = {
+  topBar: {
+      title: {
+          text: 'Sign In',
+          color: 'black'
+      }
+  }
 }

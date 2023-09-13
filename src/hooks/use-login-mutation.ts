@@ -10,13 +10,12 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-export function useLoginMutation(email: string, password: string) {
+export function useLoginMutation() {
   const [loginMutation, { data, loading, error }] = useMutation(
     LOGIN_MUTATION,
     {
-      variables: { auth: { email: email, password: password } },
       errorPolicy: 'all',
-      onCompleted: (data) => storage.set('token', data.login.token),
+      onCompleted: (data) => {storage.set('token', data.login.token);Alert.alert(data.login.token)},
       onError: (error) => Alert.alert('Erro de Autenticação', error.message)
     });
   return { loginMutation, data, loading, error };

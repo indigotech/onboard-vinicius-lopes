@@ -12,7 +12,7 @@ import { useLoginMutation } from "./hooks/use-login-mutation";
 export function LoginScreen (): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const {loginMutation, loading, error } = useLoginMutation(email, password);
+    const { loginMutation, loading } = useLoginMutation();
 
     function handleEmailChange(email: string): void {
       setEmail(email);
@@ -28,11 +28,15 @@ export function LoginScreen (): JSX.Element {
       const inputs = [emailValidation, passwordValidation];
       
       if (isEveryInputValid(inputs)) {
-        loginMutation();
+        login(email, password);
       } else {
         showFirstInvalidInput(inputs);
       }
       clearAllInputs();
+    }
+
+    function login(email: string, password: string) {
+      loginMutation({ variables: { auth: { email, password } } });
     }
 
     function showFirstInvalidInput(inputs: Array<InputValidation>): void {

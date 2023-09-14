@@ -16,13 +16,11 @@ import {
 } from "../utils/input-validations";
 import { useLoginMutation } from "./hooks/use-login-mutation";
 import { Navigation } from "react-native-navigation";
-import { storage } from "../App";
+import { storage } from "../utils/storage";
 
 interface Props {
   componentId: string;
 }
-
-
 
 export function LoginScreen({componentId}: Props): JSX.Element {
     const [email, setEmail] = useState('');

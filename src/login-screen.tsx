@@ -22,10 +22,26 @@ interface Props {
   componentId: string;
 }
 
+
+
 export function LoginScreen({componentId}: Props): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { loginMutation, loading } = useLoginMutation();
+    const { login, loading } = useLoginMutation({
+      onLoginCompleted: (data) => {
+        saveToken(data.login.token);
+        goToHome();
+      },
+      onLoginError: (error) => Alert.alert('Erro de Autenticação', error?.message)
+    });
+
+    function saveToken(token: string) {
+      storage.set('token', token);
+    }
+
+    function goToHome() {
+      Navigation.push(componentId, { component: { name: 'HOME' } });
+    }
 
     function handleEmailChange(email: string): void {
       setEmail(email);
@@ -45,21 +61,7 @@ export function LoginScreen({componentId}: Props): JSX.Element {
       } else {
         showFirstInvalidInput(inputs);
       }
-      // clearAllInputs();
-    }
-
-    function login(email: string, password: string) {
-      loginMutation({
-        variables: { auth: { email, password } },
-        onCompleted: (data) => {
-          storage.set('token', data.login.token);
-          goToHome();
-        },
-      });   
-    }
-
-    function goToHome(): void {
-      Navigation.push(componentId, { component: { name: 'HOME' } });
+      clearAllInputs();
     }
 
     function showFirstInvalidInput(inputs: Array<InputValidation>): void {

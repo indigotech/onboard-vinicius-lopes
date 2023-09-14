@@ -45,7 +45,7 @@ export function LoginScreen({componentId}: Props): JSX.Element {
       } else {
         showFirstInvalidInput(inputs);
       }
-      clearAllInputs();
+      // clearAllInputs();
     }
 
     function login(email: string, password: string) {

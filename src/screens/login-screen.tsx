@@ -5,7 +5,8 @@ import {
   Button,
   Alert,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  SafeAreaView
 } from "react-native";
 import { InputSimple } from "../components/input-simple";
 import { 
@@ -76,26 +77,28 @@ export function LoginScreen({componentId}: Props): JSX.Element {
     }
 
     return (
-      <View style={styles.mainView}>
-        <Text style={styles.greeting}>Bem-vindo(a) à Taqtile!</Text>
-        <InputSimple
-          inputHeader='E-mail'
-          value={email}
-          onTextChange={handleEmailChange}/>
-        <InputSimple
-          inputHeader='Senha'
-          value={password}
-          onTextChange={handlePasswordChange}
-          secureTextEntry={true}
-        />
-        <Button
-          onPress={handleLoginButton}
-          disabled={loading}
-          title='Entrar'
-          color='purple'
-        />
-        {loading && <ActivityIndicator size='large' />}
-      </View>
+      <SafeAreaView>
+        <View style={styles.mainView}>
+          <Text style={styles.greeting}>Bem-vindo(a) à Taqtile!</Text>
+          <InputSimple
+            inputHeader='E-mail'
+            value={email}
+            onTextChange={handleEmailChange}/>
+          <InputSimple
+            inputHeader='Senha'
+            value={password}
+            onTextChange={handlePasswordChange}
+            secureTextEntry={true}
+            />
+          <Button
+            onPress={handleLoginButton}
+            disabled={loading}
+            title='Entrar'
+            color='purple'
+            />
+          {loading && <ActivityIndicator size='large' />}
+        </View>
+      </SafeAreaView>
     );
 }
 
@@ -108,3 +111,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
+
+LoginScreen.options = {
+  topBar: {
+      title: {
+          text: 'Sign In',
+          color: 'black'
+      }
+  }
+}

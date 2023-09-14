@@ -3,7 +3,7 @@
  */
 
 import { Navigation } from 'react-native-navigation';
-import { HomeScreen } from './src/home-screen';
+import { HomeScreen } from './src/screens/home-screen';
 import { App } from './App';
 
 Navigation.registerComponent('LOGIN', () => App);

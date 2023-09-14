@@ -4,10 +4,8 @@ import { MMKV } from 'react-native-mmkv';
 import { NavigationProps } from 'react-native-navigation';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './src/apollo/apollo';
-import { LoginScreen } from './src/login-screen';
+import { LoginScreen } from './src/screens/login-screen';
 
-
-export const storage = new MMKV({ id: 'onboarding-app' });
 export function App({componentId}: NavigationProps): JSX.Element{
   return (
     <ApolloProvider client={client}>

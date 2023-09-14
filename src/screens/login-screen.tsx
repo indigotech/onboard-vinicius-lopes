@@ -7,16 +7,16 @@ import {
   StyleSheet,
   ActivityIndicator
 } from "react-native";
-import { InputSimple } from "./input-simple";
+import { InputSimple } from "../components/input-simple";
 import { 
   InputValidation,
   isEveryInputValid, 
   validateEmail, 
   validatePassword 
-} from "../utils/input-validations";
-import { useLoginMutation } from "./hooks/use-login-mutation";
+} from "../../utils/input-validations";
+import { useLoginMutation } from "../hooks/use-login-mutation";
 import { Navigation } from "react-native-navigation";
-import { storage } from "../utils/storage";
+import { storage } from "../../utils/storage";
 
 interface Props {
   componentId: string;

@@ -1,7 +1,8 @@
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql, BaseMutationOptions, ApolloError } from "@apollo/client";
 import { Alert } from "react-native";
+import { NavigationProps } from "react-native-navigation";
+import { Navigation } from "react-native-navigation";
 import { storage } from "../../App";
-
 const LOGIN_MUTATION = gql`
   mutation MakeLogin($auth: LoginInput!) {
     login(data: $auth) {
@@ -9,14 +10,26 @@ const LOGIN_MUTATION = gql`
     }
   }
 `;
-
-export function useLoginMutation() {
+type LoginCallbacks = {
+  onLoginCompleted: (data?: any) => void;
+  onLoginError: (error?: ApolloError) => void;
+} 
+  
+export function useLoginMutation({onLoginCompleted, onLoginError}: LoginCallbacks) {
+  
   const [loginMutation, { data, loading, error }] = useMutation(
     LOGIN_MUTATION,
     {
       errorPolicy: 'all',
-      onCompleted: (data) => storage.set('token', data.login.token),
-      onError: (error) => Alert.alert('Erro de Autenticação', error.message)
+      onCompleted: onLoginCompleted,
+      onError: onLoginError
     });
-  return { loginMutation, data, loading, error };
+
+  function login(email: string, password: string) {
+    loginMutation({
+      variables: { auth: { email, password } },
+    });   
+  }
+
+  return { login, data, loading, error };
 }

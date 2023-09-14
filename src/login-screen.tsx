@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { View, Text, Button, Alert, StyleSheet, ActivityIndicator } from "react-native";
+import { 
+  View,
+  Text,
+  Button,
+  Alert,
+  StyleSheet,
+  ActivityIndicator
+} from "react-native";
 import { InputSimple } from "./input-simple";
 import { 
   InputValidation,
@@ -8,11 +15,33 @@ import {
   validatePassword 
 } from "../utils/input-validations";
 import { useLoginMutation } from "./hooks/use-login-mutation";
+import { Navigation } from "react-native-navigation";
+import { storage } from "../App";
 
-export function LoginScreen (): JSX.Element {
+interface Props {
+  componentId: string;
+}
+
+
+
+export function LoginScreen({componentId}: Props): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { loginMutation, loading } = useLoginMutation();
+    const { login, loading } = useLoginMutation({
+      onLoginCompleted: (data) => {
+        saveToken(data.login.token);
+        goToHome();
+      },
+      onLoginError: (error) => Alert.alert('Erro de Autenticação', error?.message)
+    });
+
+    function saveToken(token: string) {
+      storage.set('token', token);
+    }
+
+    function goToHome() {
+      Navigation.push(componentId, { component: { name: 'HOME' } });
+    }
 
     function handleEmailChange(email: string): void {
       setEmail(email);
@@ -33,10 +62,6 @@ export function LoginScreen (): JSX.Element {
         showFirstInvalidInput(inputs);
       }
       clearAllInputs();
-    }
-
-    function login(email: string, password: string) {
-      loginMutation({ variables: { auth: { email, password } } });
     }
 
     function showFirstInvalidInput(inputs: Array<InputValidation>): void {

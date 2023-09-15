@@ -1,17 +1,15 @@
+import  React  from "react";
 import { SafeAreaView, ActivityIndicator } from "react-native";
 import { UsersList } from "../components/users-list";
 import { useGetUsers } from "../hooks/use-get-users";
 
 export function HomeScreen(): JSX.Element {
-  const { loading, data } = useGetUsers();
-  
-  if (loading) {
-    return <ActivityIndicator size={'large'}/>
-  }
+  const { loading, users, loadMore } = useGetUsers();
 
   return(
     <SafeAreaView>
-      <UsersList users={data.users.nodes}/>
+      <UsersList users={users} fetchMore={loadMore}/>
+      { loading && <ActivityIndicator /> }
     </SafeAreaView>
   );
 }

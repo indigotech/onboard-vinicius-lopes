@@ -95,7 +95,7 @@ export function LoginScreen({componentId}: Props): JSX.Element {
             disabled={loading}
             title='Entrar'
             color='purple'
-            />
+          />
           {loading && <ActivityIndicator size='large' />}
         </View>
       </SafeAreaView>

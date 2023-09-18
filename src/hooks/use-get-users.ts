@@ -1,6 +1,14 @@
 import { useQuery, gql } from "@apollo/client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Alert } from "react-native";
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+const FECTH_LIMIT = 20;
 
 const USERS_QUERY = gql`
   query UsersQuery($pagination: PageInput) {
@@ -14,18 +22,8 @@ const USERS_QUERY = gql`
   }
 `;
 
-const FECTH_LIMIT = 20;
-
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-}
-
-export type Users = Array<User>;
-
 export function useGetUsers() {
-  const [users, setUsers] = useState<Users>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [offset, setOffset] = useState(0);
   const { loading } = useQuery(
     USERS_QUERY,
@@ -38,9 +36,9 @@ export function useGetUsers() {
       onError: (error) => Alert.alert(error.message)
   });
 
-  function loadMore() {
+  const loadMore = useCallback(() => {
     setOffset(offset + FECTH_LIMIT);
-  }
+  }, [offset]);
 
   return { loading, users, loadMore };
 }

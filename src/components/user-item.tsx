@@ -1,11 +1,11 @@
 import { View, Text } from 'react-native';
 
-type Props = {
+interface Props {
   name: string;
   email: string;
 }
 
-export function Item({name, email}: Props): JSX.Element{
+export function Item({name, email}: Props): JSX.Element {
   return (
     <View>
       <Text>{name} - {email}</Text>      

@@ -1,14 +1,18 @@
 import { FlatList } from "react-native";
 import { Item } from "./user-item";
+import { User } from "../hooks/use-get-users";
 
-type fetchFn = () => void;
+interface Props {
+  users: User[];
+  fetchMore: () => void;
+}
 
-export function UsersList({users, fetchMore}: {users: any, fetchMore: fetchFn}): JSX.Element {
+export function UsersList({users, fetchMore}: Props): JSX.Element {
 
   return (
     <FlatList 
       data={users}
-      keyExtractor={(user) => user.id}
+      keyExtractor={(item) => item.id}
       renderItem={({item}) => <Item name={item.name} email={item.email} />}
       onEndReachedThreshold={0.4}
       onEndReached={fetchMore}

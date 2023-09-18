@@ -3,7 +3,7 @@
  */
 
 import { Navigation } from 'react-native-navigation';
-import { client } from './src/apollo/apollo';
+import { client } from './src/apollo';
 import { ApolloProvider } from '@apollo/client';
 import { LoginScreen } from './src/screens/login-screen';
 import { HomeScreen } from './src/screens/home-screen';

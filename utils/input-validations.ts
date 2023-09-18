@@ -1,35 +1,73 @@
-const EMPTY_STRING_SIZE = 0; 
-const MINIMUM_PASSWORD_SIZE = 7;
-
-export const ErrorMessages = {
-  EMPTY_INPUT: 'O campo deve ser preenchido',
-  SHORT_INPUT: 'A senha deve conter, no mínimo, 7 caracteres',
-  INVALID_EMAIL: 'O e-mail não atende ao padrão ###@###.com',
-  INVALID_PASSWORD: 'A senha deve conter, no mínimo, uma letra e um dígito',
-}
 export interface InputValidation {
   inputHeader: string;
   isValidInput: boolean;
   errorMessage?: string;
 }
 
+export const ErrorMessages = {
+  EMPTY_INPUT: 'O campo deve ser preenchido',
+  SHORT_INPUT: 'A senha deve conter, no mínimo, 7 caracteres',
+  INVALID_EMAIL: 'O e-mail não atende ao padrão ###@###.com',
+  INVALID_PASSWORD: 'A senha deve conter, no mínimo, uma letra e um dígito',
+  INVALID_BIRTH: 'Data de nascimento inválida',
+  INVALID_PHONE: "O telefone digitado não é válido",
+  INVALID_ROLE: "A função digitada não é válida. Apenas admin e user são aceitos."
+}
+
 function isInputEmpty(input: string): boolean {
   return input.length === 0 ? true : false;
 }
 
-function isInputTooShort(input: string, minimumPasswordSize: number): boolean {
+function isInputTooShort(input: string): boolean {
+  const minimumPasswordSize = 7;
   return input.length < minimumPasswordSize ? true : false;
 }
 
 function isEmailPatternInvalid(email: string): boolean {
-  const emailValidPattern: RegExp = /\w{3,}\@\w{3,}\.com(\.br)?/;
+  const emailValidPattern: RegExp = /^\w{3,}\@\w{3,}\.com(\.br)?$/;
   return email.match(emailValidPattern) ? false : true;
 }
 
 function isPasswordPatternInvalid(password: string): boolean {
-  const hasLetter = /[a-zA-Z]/;
-  const hasDigit = /\d/;
-  return password.match(hasLetter) && password.match(hasDigit) ? false : true;
+  return hasDigit(password) && hasLetter(password) ? false : true;
+}
+
+function hasDigit(field: string): boolean {
+  const digit = /\d/
+  return field.match(digit) ? true : false;
+}
+
+function hasLetter(field: string): boolean {
+  const letters = /[a-zA-Z]/
+  return field.match(letters) ? true : false;
+}
+
+function isPhoneInvalid(phone: string): boolean {
+  const phonePattern = /^\(\d\d\)9?\d{4}-\d{4}$/
+  return phone.match(phonePattern) ? false : true;
+}
+
+function isBirthDateOutOfRange(birth: string): boolean {
+  const yearPattern = /^(?<day>\d{2})\/(?<month>\d{2})\/(?<year>\d{4})$/;
+  const date = birth.match(yearPattern);
+  const formatedDate = date?.groups?.year + "-" + date?.groups?.month + "-" + date?.groups?.day;
+  try {
+    const limitDate = new Date(1923, 12, 31);
+    const actualDate = new Date(formatedDate);
+    const today = new Date();
+    if (actualDate < limitDate || actualDate > today) {
+      return true
+    }
+  } catch {
+    return true;
+  } 
+
+  return false;
+}
+
+function isRoleInvalid(role: string) {
+  const validRoles = ['admin', 'user'];
+  return validRoles.includes(role) ? false : true; 
 }
 
 export function validateEmail(email: string): InputValidation {
@@ -58,7 +96,7 @@ export function validatePassword(password: string): InputValidation {
     passwordValidation.errorMessage = ErrorMessages.EMPTY_INPUT;  
     return passwordValidation;
   }
-  if (isInputTooShort(password, MINIMUM_PASSWORD_SIZE)) {
+  if (isInputTooShort(password)) {
     passwordValidation.isValidInput = false;
     passwordValidation.errorMessage = ErrorMessages.SHORT_INPUT;
     return passwordValidation;
@@ -71,6 +109,75 @@ export function validatePassword(password: string): InputValidation {
   return passwordValidation;
 }
 
+export function validatePhone(phone: string): InputValidation{
+  const inputHeader = 'Telefone';
+  const phoneValidation: InputValidation = { inputHeader, isValidInput: true };
+
+  if (isInputEmpty(phone)) {
+    phoneValidation.isValidInput = false;
+    phoneValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
+    return phoneValidation;
+  }
+  if (isPhoneInvalid(phone)) {
+    phoneValidation.isValidInput = false;
+    phoneValidation.errorMessage = ErrorMessages.INVALID_PHONE;
+    return phoneValidation;
+  }
+  return phoneValidation;
+}
+
+export function validateName(name: string): InputValidation{
+  const inputHeader = 'Nome';
+  const nameValidation: InputValidation = { inputHeader, isValidInput: true };
+
+  if (isInputEmpty(name)) {
+    nameValidation.isValidInput = false;
+    nameValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
+    return nameValidation;
+  }
+  return nameValidation;
+}
+
+export function validateBirth(birth: string): InputValidation{
+  const inputHeader = 'Data de Nascimento';
+  const birthValidation: InputValidation = { inputHeader, isValidInput: true };
+
+  if (isInputEmpty(birth)) {
+    birthValidation.isValidInput = false;
+    birthValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
+    return birthValidation;
+  }
+  if (isBirthDateOutOfRange(birth)) {
+    birthValidation.isValidInput = false;
+    birthValidation.errorMessage = ErrorMessages.INVALID_BIRTH;
+    return birthValidation;
+  }
+  return birthValidation;
+}
+
+export function validateRole(role: string): InputValidation {
+  const inputHeader = 'Função';
+  const roleValidation: InputValidation = { inputHeader, isValidInput: true };
+
+  if (isInputEmpty(role)) {
+    roleValidation.isValidInput = false;
+    roleValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
+    return roleValidation;
+  }
+  if (isRoleInvalid(role)) {
+    roleValidation.isValidInput = false;
+    roleValidation.errorMessage = ErrorMessages.INVALID_ROLE;
+    return roleValidation;
+  }
+  return roleValidation;
+}
+export function validateID(id: string): InputValidation{
+  const inputHeader = 'ID';
+  const idValidation: InputValidation = { inputHeader, isValidInput: true }; 
+  return idValidation;
+}
+
 export function isEveryInputValid(inputs: Array<InputValidation>): boolean {
   return inputs.every((input) => input.isValidInput);
 }
+

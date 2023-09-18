@@ -1,8 +1,5 @@
-import { useMutation, gql, BaseMutationOptions, ApolloError } from "@apollo/client";
-import { Alert } from "react-native";
-import { NavigationProps } from "react-native-navigation";
-import { Navigation } from "react-native-navigation";
-import { storage } from "../../App";
+import { useMutation, gql, ApolloError } from "@apollo/client";
+
 const LOGIN_MUTATION = gql`
   mutation MakeLogin($auth: LoginInput!) {
     login(data: $auth) {
@@ -10,6 +7,7 @@ const LOGIN_MUTATION = gql`
     }
   }
 `;
+
 type LoginCallbacks = {
   onLoginCompleted: (data?: any) => void;
   onLoginError: (error?: ApolloError) => void;

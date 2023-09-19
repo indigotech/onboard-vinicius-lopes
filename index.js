@@ -15,19 +15,19 @@ Navigation.registerComponent('SIGNUP', () => ApolloWrappedSignUp);
 
 const ApolloWrappedLogin = (props) => (
   <ApolloProvider client={client}>
-      <LoginScreen {...props} />
-    </ApolloProvider>
+    <LoginScreen {...props} />
+  </ApolloProvider>
 );
 
 const ApolloWrappedHome = (props) => (
   <ApolloProvider client={client}>
-      <HomeScreen {...props}/>
-    </ApolloProvider>
+    <HomeScreen {...props}/>
+  </ApolloProvider>
 );
 
-const ApolloWrappedSignUp = () => (
+const ApolloWrappedSignUp = (props) => (
   <ApolloProvider client={client}>
-    <SignUpScreen />
+    <SignUpScreen {...props} />
   </ApolloProvider>
 );
 

@@ -33,17 +33,17 @@ function isPasswordPatternInvalid(password: string): boolean {
 }
 
 function hasDigit(field: string): boolean {
-  const digit = /\d/
+  const digit = /\d/;
   return field.match(digit) ? true : false;
 }
 
 function hasLetter(field: string): boolean {
-  const letters = /[a-zA-Z]/
+  const letters = /[a-zA-Z]/;
   return field.match(letters) ? true : false;
 }
 
 function isPhoneInvalid(phone: string): boolean {
-  const phonePattern = /^\(\d\d\)9?\d{4}-\d{4}$/
+  const phonePattern = /^\d\d9?\d{4}\d{4}$/;
   return phone.match(phonePattern) ? false : true;
 }
 
@@ -182,13 +182,7 @@ export function validateRole(role: string): InputValidation {
   }
   return roleValidation;
 }
-export function validateID(id: string): InputValidation{
-  const inputHeader = 'ID';
-  const idValidation: InputValidation = { inputHeader, isValidInput: true }; 
-  return idValidation;
-}
 
 export function isEveryInputValid(inputs: Array<InputValidation>): boolean {
   return inputs.every((input) => input.isValidInput);
 }
-

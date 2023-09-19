@@ -1,5 +1,4 @@
-import { Button } from "@react-native-material/core";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import { Navigation } from "react-native-navigation";
 
 interface Props {
@@ -13,9 +12,9 @@ export function NavigationFAB({title, srcId, destName}: Props) {
   const onPress = () => Navigation.push(srcId, { component: { name: destName } });
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <Pressable style={styles.container} onPress={onPress}>
       <Text style={styles.label}>{title}</Text>
-    </TouchableOpacity>
+    </Pressable>
    );
 }
 

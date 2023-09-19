@@ -96,15 +96,6 @@ export function LoginScreen({componentId}: LoginScreenProps): JSX.Element {
             title='Entrar'
             color='purple'
           />
-          <Button
-            onPress={() => {
-              setEmail('admin@taqtile.com.br');
-              setPassword('1234qwer');
-            }}
-            disabled={loading}
-            title='Preencher'
-            color='blue'
-          />
           {loading && <ActivityIndicator size='large' />}
         </View>
       </SafeAreaView>

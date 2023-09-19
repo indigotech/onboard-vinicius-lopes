@@ -1,9 +1,15 @@
-import { ApolloError, gql, useLazyQuery } from "@apollo/client";
-import { useCallback } from "react";
+import { gql, useQuery } from "@apollo/client";
 
-type UserDetailsCallbacks = {
-  onQueryCompleted: (data?: any) => void;
-  onQueryError: (error?: ApolloError) => void;
+interface HookProps {
+  id: string
+}
+
+export interface UserDetails {
+  name: string;
+  email: string;
+  phone: string;
+  birthDate: string;
+  role: string;
 }
 
 const USER_DETAILS = gql`
@@ -18,20 +24,14 @@ const USER_DETAILS = gql`
   }
 `;
 
-export function useGetUserDetails({ onQueryCompleted, onQueryError }: UserDetailsCallbacks) {
-  const [queryUserDetails, { data, loading, error }] = useLazyQuery(
+export function useGetUserDetails({ id }: HookProps) {
+  const { data, loading, error } = useQuery(
     USER_DETAILS,
     {
-      errorPolicy: 'all',
-      onCompleted: onQueryCompleted,
-      onError: onQueryError
+      variables: { id },
+      errorPolicy: 'all'
     }
   );
   
-  const getUserDetails = useCallback((id: any) => {
-    queryUserDetails({
-      variables: { id }
-    });    
-  }, []);
-  return { getUserDetails, data, loading, error };
+  return { data, loading, error };
 }

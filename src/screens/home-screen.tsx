@@ -3,12 +3,16 @@ import { SafeAreaView, ActivityIndicator } from "react-native";
 import { UsersList } from "../components/users-list";
 import { useGetUsers } from "../hooks/use-get-users";
 
-export function HomeScreen(): JSX.Element {
+interface Props{
+  componentId: string;
+}
+
+export function HomeScreen({componentId}: Props): JSX.Element {
   const { loading, users, loadMore } = useGetUsers();
 
   return(
     <SafeAreaView>
-      <UsersList users={users} fetchMore={loadMore}/>
+      <UsersList navigationId={componentId} users={users} fetchMore={loadMore}/>
       { loading && <ActivityIndicator /> }
     </SafeAreaView>
   );

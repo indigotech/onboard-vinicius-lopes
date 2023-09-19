@@ -47,21 +47,32 @@ function isPhoneInvalid(phone: string): boolean {
   return phone.match(phonePattern) ? false : true;
 }
 
-function isBirthDateOutOfRange(birth: string): boolean {
-  const yearPattern = /^(?<day>\d{2})\/(?<month>\d{2})\/(?<year>\d{4})$/;
-  const date = birth.match(yearPattern);
+function isDateInvalid(birthDate: string): boolean {
+  const datePattern = /^(?<day>\d{2})\/(?<month>\d{2})\/(?<year>\d{4})$/;
+  const date = birthDate.match(datePattern);
   const formatedDate = date?.groups?.year + "-" + date?.groups?.month + "-" + date?.groups?.day;
-  try {
-    const limitDate = new Date(1923, 12, 31);
-    const actualDate = new Date(formatedDate);
-    const today = new Date();
-    if (actualDate < limitDate || actualDate > today) {
-      return true
-    }
-  } catch {
+  if (isDateFormatInvalid(formatedDate)) {
     return true;
-  } 
+  }
+  if(isBirthDateOutOfRange(formatedDate)) {
+    return true;
+  }
+  return false;
+}
 
+function isDateFormatInvalid(date: string): boolean {
+  const completeDate = Date.parse(date);
+  return isNaN(completeDate);
+}
+
+function isBirthDateOutOfRange(formatedBirth: string): boolean {
+  const limitDate = new Date(1923, 12, 31);
+  const birthDate = new Date(formatedBirth);
+  const today = new Date();
+
+  if (birthDate < limitDate || birthDate > today) {
+    return true;
+  }
   return false;
 }
 
@@ -147,7 +158,7 @@ export function validateBirth(birth: string): InputValidation{
     birthValidation.errorMessage = ErrorMessages.EMPTY_INPUT;
     return birthValidation;
   }
-  if (isBirthDateOutOfRange(birth)) {
+  if (isDateInvalid(birth)) {
     birthValidation.isValidInput = false;
     birthValidation.errorMessage = ErrorMessages.INVALID_BIRTH;
     return birthValidation;

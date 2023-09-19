@@ -18,7 +18,7 @@ export function HomeScreen({componentId}: HomeScreenProps): JSX.Element {
 
   return(
     <SafeAreaView>
-      <UsersList users={users} fetchMore={loadMore}/>
+      <UsersList navigationId={componentId} users={users} fetchMore={loadMore}/>
       { loading && <ActivityIndicator /> }
       <FAB title="Novo Usuário" onPress={goToSignUpPage}
       />

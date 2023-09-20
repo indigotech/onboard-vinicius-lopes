@@ -18,14 +18,26 @@ import {
 import { useLoginMutation } from "../hooks/use-login-mutation";
 import { Navigation } from "react-native-navigation";
 import { storage } from "../../utils/storage";
+import { MainButton } from "../components/main-button";
+import { Header } from "../components/header";
 
 interface LoginScreenProps {
   componentId: string;
 }
 
-export function LoginScreen({componentId}: LoginScreenProps): JSX.Element {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+interface Input extends InputValidation {
+  value: string;
+}
+
+const DefaultInput: Input = {
+  value: '',
+  inputHeader: '',
+  isValidInput: false
+}
+
+export function LoginScreen({componentId}: Props): JSX.Element {
+    const [email, setEmail] = useState<Input>(DefaultInput);
+    const [password, setPassword] = useState<Input>(DefaultInput);
     const { login, loading } = useLoginMutation({
       onLoginCompleted: (data) => {
         saveToken(data.login.token);
@@ -43,24 +55,22 @@ export function LoginScreen({componentId}: LoginScreenProps): JSX.Element {
     }
 
     function handleEmailChange(email: string): void {
-      setEmail(email);
+      const emailValidation = validateEmail(email);
+      setEmail({ ...emailValidation, value: email });
     }
-
+    
     function handlePasswordChange(password: string): void {
-      setPassword(password);
+      const passwordValidation = validatePassword(password);
+      setPassword({ ...passwordValidation, value: password });
     }
 
     function handleLoginButton(): void {
-      const emailValidation = validateEmail(email);
-      const passwordValidation = validatePassword(password);
-      const inputs = [emailValidation, passwordValidation];
+      const inputs = [email, password];
       
       if (isEveryInputValid(inputs)) {
-        login(email, password);
-      } else {
-        showFirstInvalidInput(inputs);
-      }
-      clearAllInputs();
+        login(email.value, password.value);
+        clearAllInputs();
+      } 
     }
 
     function showFirstInvalidInput(inputs: Array<InputValidation>): void {
@@ -72,30 +82,28 @@ export function LoginScreen({componentId}: LoginScreenProps): JSX.Element {
     }
 
     function clearAllInputs(): void {
-      setEmail('');
-      setPassword('');
+      setEmail(DefaultInput);
+      setPassword(DefaultInput);
     }
 
     return (
       <SafeAreaView>
         <View style={styles.mainView}>
-          <Text style={styles.greeting}>Bem-vindo(a) à Taqtile!</Text>
+          <Header $bold="bold">Bem-vindo(a) à Taqtile!</Header>
           <InputSimple
-            inputHeader='E-mail'
-            value={email}
-            onTextChange={handleEmailChange}/>
-          <InputSimple
-            inputHeader='Senha'
-            value={password}
+            label='E-mail'
+            value={email?.value}
+            onTextChange={handleEmailChange}
+            errorMessage={email.errorMessage}
+            />
+            <InputSimple
+            label='Senha'
+            value={password?.value}
             onTextChange={handlePasswordChange}
             secureTextEntry={true}
-            />
-          <Button
-            onPress={handleLoginButton}
-            disabled={loading}
-            title='Entrar'
-            color='purple'
+            errorMessage={password.errorMessage}
           />
+          <MainButton primary label="Entar" onPress={handleLoginButton}/>
           {loading && <ActivityIndicator size='large' />}
         </View>
       </SafeAreaView>

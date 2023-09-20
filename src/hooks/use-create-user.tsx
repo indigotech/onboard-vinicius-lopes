@@ -10,9 +10,17 @@ interface UserInput {
   role: string;
 }
 
-interface CreateCallbacks {
-  onCreateCompleted: (data?: any) => void;
-  onCreateError: (error?: ApolloError) => void;
+interface UserCreatedResponse {
+  createUser : UserCreatedInfo
+}
+
+type UserCreatedInfo = {
+  name: string;
+}
+
+interface CreateUserCallbacks {
+  onCreateCompleted: (data: UserCreatedResponse) => void;
+  onCreateError: (error: ApolloError) => void;
 }
 
 const CREATE_USER = gql`
@@ -23,7 +31,7 @@ const CREATE_USER = gql`
   }
 `;
 
-export function useCreateUser({onCreateCompleted, onCreateError}: CreateCallbacks) {
+export function useCreateUser({onCreateCompleted, onCreateError}: CreateUserCallbacks) {
   const [createMutation, {data, loading, error}] = useMutation(
     CREATE_USER,
     {

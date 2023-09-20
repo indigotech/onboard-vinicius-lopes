@@ -14,11 +14,11 @@ import {
 import { useCreateUser } from "../hooks/use-create-user";
 import { Navigation } from "react-native-navigation";
 
-interface Props {
+interface SignUpScreenProps {
   componentId: string;
 }
 
-export function SignUpScreen({componentId}: Props): JSX.Element {
+export function SignUpScreen({componentId}: SignUpScreenProps): JSX.Element {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -35,15 +35,14 @@ export function SignUpScreen({componentId}: Props): JSX.Element {
 
   function handleBirth(birth: string) {
     const dateChars = /\d$|\/$/;
-    // remove characters that aren't digits or slashes
-    if (birth.match(dateChars) || birth.length === 0) {
+    if (isInputAllowed(dateChars, birth)) {
       setBirth(birth);
     }
   }
 
   function handlePhone(phone: string) {
     const phoneChars = /\d$/;
-    if (phone.match(phoneChars) || phone.length === 0) {
+    if (isInputAllowed(phoneChars, phone)) {
       setPhone(phone);
     }
   }
@@ -58,7 +57,7 @@ export function SignUpScreen({componentId}: Props): JSX.Element {
       validateRole(role)
     ];
     if (isEveryInputValid(inputsValidaton)) {
-      const birthDate = formatDateInput(birth);
+      const birthDate = convertDateFromBrazillianToAmerican(birth);
       createUser({name, email, phone, birthDate, password, role});
     } else {
       showFirstInvalidInput(inputsValidaton);
@@ -110,11 +109,13 @@ export function SignUpScreen({componentId}: Props): JSX.Element {
     </>
   );
 }
-
-// Converts from brazilian standard to Date standard
-function formatDateInput(date: string): string {
+function convertDateFromBrazillianToAmerican(date: string): string {
   const datePattern = /^(?<day>\d{2})\/(?<month>\d{2})\/(?<year>\d{4})$/;
   const dateMatch = date.match(datePattern)?.groups
-  const formattedDate = dateMatch?.year + "-" + dateMatch?.month + "-" + dateMatch?.day;
+  const formattedDate = dateMatch?.month + "-" + dateMatch?.day + "-" + dateMatch?.year;
   return formattedDate;
+}
+
+function isInputAllowed(allowedRegex: RegExp, input: string) {
+  return (input.match(allowedRegex) || input.length === 0) ? true : false;
 }

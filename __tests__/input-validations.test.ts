@@ -10,7 +10,7 @@ test('Has an empty email invalidation', () => {
     expect(emailValidation.errorMessage).toBe(ErrorMessages.EMPTY_INPUT);
 });
 
-test('Has an invalid email message', () => {
+test('Has an invalid email pattern', () => {
     const invalidEmail: string = 'e@usp.com';
     let emailValidation: InputValidation = validateEmail(invalidEmail);
     expect(emailValidation.isValidInput).toBe(false);
@@ -60,8 +60,8 @@ test('Has a valid password', () => {
     expect(passwordValidation.errorMessage).toBeUndefined();
 });
 
-test('Has an invalid role', () => {
-    const invalidRole: string = 'estagiario'; // Role is out of the enum options
+test('Has a role not defined', () => {
+    const invalidRole: string = 'estagiario';
     let roleValidation: InputValidation = validateRole(invalidRole);
     expect(roleValidation.isValidInput).toBe(false);
     expect(roleValidation.errorMessage).toBe(ErrorMessages.INVALID_ROLE);
@@ -74,8 +74,8 @@ test('Has a valid role', () => {
     expect(roleValidation.errorMessage).toBeUndefined();
 });
 
-test('Has an invalid phone', () => {
-    const invalidPhone: string = '119888777'; // too short (brazilian standards)
+test('Has a phone that is too short', () => {
+    const invalidPhone: string = '119888777';
     let phoneValidation: InputValidation = validatePhone(invalidPhone);
     expect(phoneValidation.isValidInput).toBe(false);
     expect(phoneValidation.errorMessage).toBe(ErrorMessages.INVALID_PHONE);

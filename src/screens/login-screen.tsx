@@ -19,11 +19,11 @@ import { useLoginMutation } from "../hooks/use-login-mutation";
 import { Navigation } from "react-native-navigation";
 import { storage } from "../../utils/storage";
 
-interface Props {
+interface LoginScreenProps {
   componentId: string;
 }
 
-export function LoginScreen({componentId}: Props): JSX.Element {
+export function LoginScreen({componentId}: LoginScreenProps): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login, loading } = useLoginMutation({

@@ -1,18 +1,14 @@
 import { Pressable, StyleSheet, Text } from "react-native";
-import { Navigation } from "react-native-navigation";
 
 interface Props {
   title: string;
-  srcId: string;
-  destName: string;
+  onPress: () => void;
 }
 
-export function NavigationFAB({title, srcId, destName}: Props) {
+export function FAB({title, onPress: navCallBack}: Props) {
   
-  const onPress = () => Navigation.push(srcId, { component: { name: destName } });
-
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable style={styles.container} onPress={navCallBack}>
       <Text style={styles.label}>{title}</Text>
     </Pressable>
    );

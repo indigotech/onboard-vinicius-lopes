@@ -2,23 +2,25 @@ import  React  from "react";
 import { SafeAreaView, ActivityIndicator } from "react-native";
 import { UsersList } from "../components/users-list";
 import { useGetUsers } from "../hooks/use-get-users";
-import { NavigationFAB } from "../components/navigation-fab";
+import { FAB } from "../components/fab";
+import { Navigation } from "react-native-navigation";
 
-interface Props {
+interface HomeScreenProps {
   componentId: string;
 }
 
-export function HomeScreen({componentId}: Props): JSX.Element {
+export function HomeScreen({componentId}: HomeScreenProps): JSX.Element {
   const { loading, users, loadMore } = useGetUsers();
+
+  function goToSignUpPage() {
+    Navigation.push(componentId, {component: { name: 'SIGNUP' } });
+  }
 
   return(
     <SafeAreaView>
       <UsersList users={users} fetchMore={loadMore}/>
       { loading && <ActivityIndicator /> }
-      <NavigationFAB 
-        title="Novo Usuário"
-        srcId={componentId}
-        destName="SIGNUP"
+      <FAB title="Novo Usuário" onPress={goToSignUpPage}
       />
     </SafeAreaView>
   );

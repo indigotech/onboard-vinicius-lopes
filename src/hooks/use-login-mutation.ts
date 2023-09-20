@@ -8,10 +8,19 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-type LoginCallbacks = {
-  onLoginCompleted: (data?: any) => void;
-  onLoginError: (error?: ApolloError) => void;
-} 
+interface LoginCallbacks {
+  onLoginCompleted: (data: LoginResponse) => void;
+  onLoginError: (error: ApolloError) => void;
+}
+
+interface LoginResponse {
+  login: LoginInfo;
+}
+
+type LoginInfo = {
+  token: string;
+}
+
   
 export function useLoginMutation({onLoginCompleted, onLoginError}: LoginCallbacks) {
   

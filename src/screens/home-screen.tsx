@@ -15,10 +15,23 @@ export function HomeScreen({componentId}: HomeScreenProps): JSX.Element {
   function goToSignUpPage() {
     Navigation.push(componentId, {component: { name: 'SIGNUP' } });
   }
+  
+  function goToUserPage(id: string) {
+    Navigation.push(componentId, {
+      component: { 
+        name: 'DETAILS',
+        passProps: { id } 
+      }
+    });
+  }
 
   return(
     <SafeAreaView>
-      <UsersList navigationId={componentId} users={users} fetchMore={loadMore}/>
+      <UsersList
+        users={users}
+        fetchMore={loadMore}
+        goToUserPage={goToUserPage}
+      />
       { loading && <ActivityIndicator /> }
       <FAB title="Novo Usuário" onPress={goToSignUpPage}
       />

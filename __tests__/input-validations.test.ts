@@ -1,5 +1,5 @@
 import { test, expect } from '@jest/globals';
-import { validateEmail, validatePassword } from '../utils/input-validations';
+import { validateBirth, validateEmail, validatePassword, validatePhone, validateRole } from '../utils/input-validations';
 import { InputValidation } from '../utils/input-validations';
 import { ErrorMessages } from '../utils/input-validations';
 
@@ -10,7 +10,7 @@ test('Has an empty email invalidation', () => {
     expect(emailValidation.errorMessage).toBe(ErrorMessages.EMPTY_INPUT);
 });
 
-test('Has an invalid email message', () => {
+test('Has an invalid email pattern', () => {
     const invalidEmail: string = 'e@usp.com';
     let emailValidation: InputValidation = validateEmail(invalidEmail);
     expect(emailValidation.isValidInput).toBe(false);
@@ -58,4 +58,53 @@ test('Has a valid password', () => {
     let passwordValidation: InputValidation = validatePassword(validPassword);
     expect(passwordValidation.isValidInput).toBe(true);
     expect(passwordValidation.errorMessage).toBeUndefined();
+});
+
+test('Has a role not defined', () => {
+    const invalidRole: string = 'estagiario';
+    let roleValidation: InputValidation = validateRole(invalidRole);
+    expect(roleValidation.isValidInput).toBe(false);
+    expect(roleValidation.errorMessage).toBe(ErrorMessages.INVALID_ROLE);
+});
+
+test('Has a valid role', () => {
+    const validRole: string = 'user';
+    let roleValidation: InputValidation = validateRole(validRole);
+    expect(roleValidation.isValidInput).toBe(true);
+    expect(roleValidation.errorMessage).toBeUndefined();
+});
+
+test('Has a phone that is too short', () => {
+    const invalidPhone: string = '119888777';
+    let phoneValidation: InputValidation = validatePhone(invalidPhone);
+    expect(phoneValidation.isValidInput).toBe(false);
+    expect(phoneValidation.errorMessage).toBe(ErrorMessages.INVALID_PHONE);
+});
+
+test('Has a valid phone', () => {
+    const validPhone: string = '11944443333';
+    let phoneValidation: InputValidation = validatePhone(validPhone);
+    expect(phoneValidation.isValidInput).toBe(true);
+    expect(phoneValidation.errorMessage).toBeUndefined();
+});
+
+test('Has a too old birth date', () => {
+    const invalidBirth: string = '01/01/1900';
+    let birthValidation: InputValidation = validateBirth(invalidBirth);
+    expect(birthValidation.isValidInput).toBe(false);
+    expect(birthValidation.errorMessage).toBe(ErrorMessages.INVALID_BIRTH);
+});
+
+test('Has a birth date in the future', () => {
+    const invalidBirth: string = '01/01/2030';
+    let birthValidation: InputValidation = validateBirth(invalidBirth);
+    expect(birthValidation.isValidInput).toBe(false);
+    expect(birthValidation.errorMessage).toBe(ErrorMessages.INVALID_BIRTH);
+});
+
+test('Has a valid birth date', () => {
+    const validBirth: string = '12/12/1998';
+    let birthValidation: InputValidation = validateBirth(validBirth);
+    expect(birthValidation.isValidInput).toBe(true);
+    expect(birthValidation.errorMessage).toBeUndefined();
 });

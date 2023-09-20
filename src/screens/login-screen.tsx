@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   SafeAreaView
 } from "react-native";
-import { InputSimple } from "../components/input-simple";
+import { StyledInput } from "../components/input-simple.styles";
 import { 
   InputValidation,
   isEveryInputValid, 
@@ -19,7 +19,8 @@ import { useLoginMutation } from "../hooks/use-login-mutation";
 import { Navigation } from "react-native-navigation";
 import { storage } from "../../utils/storage";
 import { MainButton } from "../components/main-button";
-import { Header } from "../components/header";
+import { StyledHeader } from "../components/header";
+import { InputSimple } from "../components/input-simple";
 
 interface LoginScreenProps {
   componentId: string;
@@ -73,14 +74,6 @@ export function LoginScreen({componentId}: Props): JSX.Element {
       } 
     }
 
-    function showFirstInvalidInput(inputs: Array<InputValidation>): void {
-      const firstInvalid = inputs.find((input) => !input.isValidInput)
-      Alert.alert(
-        `Erro no campo "${firstInvalid?.inputHeader}"`, 
-        `${firstInvalid?.errorMessage}`
-      );
-    }
-
     function clearAllInputs(): void {
       setEmail(DefaultInput);
       setPassword(DefaultInput);
@@ -89,21 +82,21 @@ export function LoginScreen({componentId}: Props): JSX.Element {
     return (
       <SafeAreaView>
         <View style={styles.mainView}>
-          <Header $bold="bold">Bem-vindo(a) à Taqtile!</Header>
+          <StyledHeader $bold="bold">Bem-vindo(a) à Taqtile!</StyledHeader>
           <InputSimple
             label='E-mail'
             value={email?.value}
             onTextChange={handleEmailChange}
             errorMessage={email.errorMessage}
-            />
-            <InputSimple
+          />
+          <InputSimple
             label='Senha'
             value={password?.value}
             onTextChange={handlePasswordChange}
             secureTextEntry={true}
             errorMessage={password.errorMessage}
           />
-          <MainButton primary label="Entar" onPress={handleLoginButton}/>
+          <MainButton primary label="Entrar" onPress={handleLoginButton}/>
           {loading && <ActivityIndicator size='large' />}
         </View>
       </SafeAreaView>

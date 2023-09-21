@@ -12,15 +12,28 @@ interface HomeScreenProps {
 export function HomeScreen({componentId}: HomeScreenProps): JSX.Element {
   const { loading, users, loadMore } = useGetUsers();
 
-  function goToSignUpPage() {
+  function handlePress() {
     Navigation.push(componentId, {component: { name: 'SIGNUP' } });
+  }
+  
+  function handleUserTap(id: string) {
+    Navigation.push(componentId, {
+      component: { 
+        name: 'DETAILS',
+        passProps: { id } 
+      }
+    });
   }
 
   return(
     <SafeAreaView>
-      <UsersList users={users} fetchMore={loadMore}/>
+      <UsersList
+        users={users}
+        fetchMore={loadMore}
+        onUserTap={handleUserTap}
+      />
       { loading && <ActivityIndicator /> }
-      <FAB title="Novo Usuário" onPress={goToSignUpPage}
+      <FAB title="Novo Usuário" onPress={handlePress}
       />
     </SafeAreaView>
   );

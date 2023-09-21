@@ -1,14 +1,17 @@
-import { View, Text } from 'react-native';
+import { Text, Pressable } from 'react-native';
 
-interface Props {
+interface ItemProps {
+  id: string;
   name: string;
   email: string;
+  goToUserPage: (id: string) => void;
 }
 
-export function Item({name, email}: Props): JSX.Element {
+export function Item({ id, name, email, goToUserPage }: ItemProps): JSX.Element {
+
   return (
-    <View>
-      <Text>{name} - {email}</Text>      
-    </View>
+    <Pressable onPress={() => goToUserPage(id)}>
+      <Text>{name} - {email}</Text>
+    </Pressable>
   );
 }

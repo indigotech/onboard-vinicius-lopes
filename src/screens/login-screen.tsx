@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { 
   View,
-  Text,
-  Button,
   Alert,
   StyleSheet,
   ActivityIndicator,
   SafeAreaView
 } from "react-native";
-import { StyledInput } from "../components/input-simple.styles";
 import { 
   InputValidation,
   isEveryInputValid, 
@@ -82,7 +79,7 @@ export function LoginScreen({componentId}: Props): JSX.Element {
     return (
       <SafeAreaView>
         <View style={styles.mainView}>
-          <StyledHeader $bold="bold">Bem-vindo(a) à Taqtile!</StyledHeader>
+          <StyledHeader bold="bold">Bem-vindo(a) à Taqtile!</StyledHeader>
           <InputSimple
             label='E-mail'
             value={email?.value}

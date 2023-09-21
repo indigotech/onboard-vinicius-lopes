@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { 
-  View,
+import {
   Alert,
   StyleSheet,
   ActivityIndicator,
@@ -18,6 +17,7 @@ import { storage } from "../../utils/storage";
 import { MainButton } from "../components/main-button";
 import { StyledHeader } from "../components/header";
 import { InputSimple } from "../components/input-simple";
+import { MainContainer } from "../components/main-container";
 
 interface LoginScreenProps {
   componentId: string;
@@ -33,7 +33,7 @@ const DefaultInput: Input = {
   isValidInput: false
 }
 
-export function LoginScreen({componentId}: Props): JSX.Element {
+export function LoginScreen({componentId}: LoginScreenProps): JSX.Element {
     const [email, setEmail] = useState<Input>(DefaultInput);
     const [password, setPassword] = useState<Input>(DefaultInput);
     const { login, loading } = useLoginMutation({
@@ -64,7 +64,7 @@ export function LoginScreen({componentId}: Props): JSX.Element {
 
     function handleLoginButton(): void {
       const inputs = [email, password];
-      
+      console.log('Trying login');
       if (isEveryInputValid(inputs)) {
         login(email.value, password.value);
         clearAllInputs();
@@ -78,7 +78,7 @@ export function LoginScreen({componentId}: Props): JSX.Element {
 
     return (
       <SafeAreaView>
-        <View style={styles.mainView}>
+        <MainContainer>
           <StyledHeader bold="bold">Bem-vindo(a) à Taqtile!</StyledHeader>
           <InputSimple
             label='E-mail'
@@ -93,9 +93,14 @@ export function LoginScreen({componentId}: Props): JSX.Element {
             secureTextEntry={true}
             errorMessage={password.errorMessage}
           />
-          <MainButton primary label="Entrar" onPress={handleLoginButton}/>
+          <MainButton 
+            primary
+            label="Entrar"
+            onPress={handleLoginButton}
+            disabled={loading}
+          />
           {loading && <ActivityIndicator size='large' />}
-        </View>
+        </MainContainer>
       </SafeAreaView>
     );
 }

@@ -2,8 +2,8 @@ import { PressableProps, TextProps } from "react-native";
 import styled from "styled-components/native";
 
 interface MainProps {
-    primary?: boolean;
-    size?: string;
+  primary?: boolean;
+  size?: string;
 }
   
 export const StyledPressable: React.FC<MainProps & PressableProps> = styled.Pressable`

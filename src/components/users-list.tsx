@@ -4,13 +4,13 @@ import { User } from "../hooks/use-get-users";
 
 interface UsersListProps {
   users: User[];
-  goToUserPage: (id: string) => void;
+  onUserTap: (id: string) => void;
   fetchMore: () => void;
 }
 
 export function UsersList({
   users,
-  goToUserPage,
+  onUserTap,
   fetchMore
 }: UsersListProps ): JSX.Element {
 
@@ -18,7 +18,7 @@ export function UsersList({
     <FlatList 
       data={users}
       keyExtractor={(item) => item.id}
-      renderItem={({item}) => <Item goToUserPage={goToUserPage} id={item.id} name={item.name} email={item.email} />}
+      renderItem={({item}) => <Item goToUserPage={onUserTap} id={item.id} name={item.name} email={item.email} />}
       onEndReachedThreshold={0.4}
       onEndReached={fetchMore}
     />

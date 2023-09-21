@@ -2,11 +2,11 @@ import { ActivityIndicator, Text } from "react-native";
 import { InfoField } from "../components/info-field";
 import { useGetUserDetails } from "../hooks/use-get-user-details";
 
-interface Props {
+interface UserDetailScreenProps {
   id: string;
 }
 
-export function UserDetailScreen({id}: Props): JSX.Element {
+export function UserDetailScreen({id}: UserDetailScreenProps): JSX.Element {
   const { data, loading, error } = useGetUserDetails({ id });
 
   if (loading) {

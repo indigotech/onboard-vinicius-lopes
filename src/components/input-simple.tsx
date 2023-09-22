@@ -1,35 +1,35 @@
 import React from "react";
-import { Text, TextInput, StyleSheet } from "react-native";
+import { StyledErrorMessage, StyledInput, StyledLabel } from "./input-simple.styles";
 
-interface InputProps {
-  inputHeader: string;
-  onTextChange: (value: string) => void;
+export interface InputSimpleProps {
+  label: string;
   value: string;
+  errorMessage?: string;
+  onTextChange: (value: string) => void;
   secureTextEntry?: boolean;
 }
 
-export function InputSimple (props: InputProps): JSX.Element {
+export function InputSimple (props: InputSimpleProps): JSX.Element {
+  const formError: boolean = props.errorMessage ? true : false;
+
   return (
     <React.Fragment>
-      <Text>
-        {props.inputHeader}
-      </Text>
-      <TextInput
-        style={styles.input}
+      <StyledLabel error={formError}>
+        {props.label}
+      </StyledLabel>
+      <StyledInput
+        error={formError}
         value={props.value}
         onChangeText={props.onTextChange}
         secureTextEntry={props.secureTextEntry}
         autoCapitalize='none'
       />
+      {
+        formError &&
+        <StyledErrorMessage>
+          {props.errorMessage}
+        </StyledErrorMessage>
+      }
     </React.Fragment>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    marginBottom: 10,
-    padding: 10,
-    borderWidth: 1,
-  },
-});

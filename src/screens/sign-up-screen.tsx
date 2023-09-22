@@ -26,7 +26,6 @@ interface Input extends InputValidation {
 
 const DefaultInput: Input = {
   value: '',
-  inputHeader: '',
   isValidInput: false
 }
 

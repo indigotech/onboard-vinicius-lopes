@@ -1,5 +1,4 @@
 export interface InputValidation {
-  inputHeader: string;
   isValidInput: boolean;
   errorMessage?: string;
 }
@@ -82,8 +81,7 @@ function isRoleInvalid(role: string) {
 }
 
 export function validateEmail(email: string): InputValidation {
-  const inputHeader = 'E-mail';
-  const emailValidation: InputValidation = { inputHeader, isValidInput: true };
+  const emailValidation: InputValidation = { isValidInput: true };
   
   if (isInputEmpty(email)) {
     emailValidation.isValidInput = false;
@@ -99,8 +97,7 @@ export function validateEmail(email: string): InputValidation {
 }
 
 export function validatePassword(password: string): InputValidation {
-  const inputHeader = 'Senha';
-  const passwordValidation: InputValidation = { inputHeader, isValidInput: true };
+  const passwordValidation: InputValidation = { isValidInput: true };
 
   if (isInputEmpty(password)) {
     passwordValidation.isValidInput = false;
@@ -121,8 +118,7 @@ export function validatePassword(password: string): InputValidation {
 }
 
 export function validatePhone(phone: string): InputValidation{
-  const inputHeader = 'Telefone';
-  const phoneValidation: InputValidation = { inputHeader, isValidInput: true };
+  const phoneValidation: InputValidation = { isValidInput: true };
 
   if (isInputEmpty(phone)) {
     phoneValidation.isValidInput = false;
@@ -138,8 +134,7 @@ export function validatePhone(phone: string): InputValidation{
 }
 
 export function validateName(name: string): InputValidation{
-  const inputHeader = 'Nome';
-  const nameValidation: InputValidation = { inputHeader, isValidInput: true };
+  const nameValidation: InputValidation = { isValidInput: true };
 
   if (isInputEmpty(name)) {
     nameValidation.isValidInput = false;
@@ -150,8 +145,7 @@ export function validateName(name: string): InputValidation{
 }
 
 export function validateBirth(birth: string): InputValidation{
-  const inputHeader = 'Data de Nascimento';
-  const birthValidation: InputValidation = { inputHeader, isValidInput: true };
+  const birthValidation: InputValidation = { isValidInput: true };
 
   if (isInputEmpty(birth)) {
     birthValidation.isValidInput = false;
@@ -167,8 +161,7 @@ export function validateBirth(birth: string): InputValidation{
 }
 
 export function validateRole(role: string): InputValidation {
-  const inputHeader = 'Função';
-  const roleValidation: InputValidation = { inputHeader, isValidInput: true };
+  const roleValidation: InputValidation = { isValidInput: true };
 
   if (isInputEmpty(role)) {
     roleValidation.isValidInput = false;

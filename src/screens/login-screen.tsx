@@ -29,7 +29,6 @@ interface Input extends InputValidation {
 
 const DefaultInput: Input = {
   value: '',
-  inputHeader: '',
   isValidInput: false
 }
 
@@ -104,13 +103,3 @@ export function LoginScreen({componentId}: LoginScreenProps): JSX.Element {
       </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-  mainView: {
-    padding: 10,
-  },
-  greeting : {
-    fontSize: 20,
-    marginVertical: 10,
-  },
-});
